@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phimple package.
  *
  * (c) Elliot Wright <elliot@elliotwright.co>
@@ -21,9 +21,9 @@ use Phimple\LockBox;
  */
 class Container implements ContainerInterface
 {
+    protected $factories;
     protected $parameters;
     protected $services;
-    protected $factories;
 
     /**
      * Constructor.
@@ -149,5 +149,46 @@ class Container implements ContainerInterface
         $this->factories->attach($callable);
 
         return $callable;
+    }
+
+    /**
+     * Extends a service definition.
+     *
+     * @param  string   $name
+     * @param  callable $callable
+     *
+     * @return callable
+     *
+     * @throws \InvalidArgumentException
+     */
+    public function extend($name, $callable)
+    {
+        if ( ! $this->services->has($name)) {
+            throw new \InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
+        }
+
+        $factory = $this->services->get($name);
+
+        if (!is_object($factory) || !method_exists($factory, '__invoke')) {
+            throw new \InvalidArgumentException(sprintf('Service "%s" does not contain an object definition.', $name));
+        }
+
+        if (!is_object($callable) || !method_exists($callable, '__invoke')) {
+            throw new \InvalidArgumentException('Extension service definition is not a Closure or invokable object.');
+        }
+
+        $extended = function($c) use($callable, $factory) {
+            return $callable($factory($c), $c);
+        };
+
+        if (isset($this->factories[$factory])) {
+            $this->factories->detach($factory);
+            $this->factories->attach($extended);
+        }
+
+        $this->services->unlock($name);
+        $this->services->set($name, $extended);
+
+        return $this->services->get($name);
     }
 }

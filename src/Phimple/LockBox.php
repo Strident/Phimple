@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phimple package.
  *
  * (c) Elliot Wright <elliot@elliotwright.co>
@@ -110,7 +110,7 @@ class LockBox implements \Countable
     /**
      * Locks an item.
      *
-     * @param  string $name
+     * @param string $name
      *
      * @return LockBox
      */
@@ -120,11 +120,25 @@ class LockBox implements \Countable
             throw new ItemNotFoundException($name);
         }
 
-        if (isset($this->locked[$name])) {
-            throw new LockedItemException($name);
+        $this->locked[$name] = true;
+
+        return $this;
+    }
+
+    /**
+     * Unlocks an item.
+     *
+     * @param string $name
+     *
+     * @return LockBox
+     */
+    public function unlock($name)
+    {
+        if ( ! $this->has($name)) {
+            throw new ItemNotFoundException($name);
         }
 
-        $this->locked[$name] = true;
+        unset($this->locked[$name]);
 
         return $this;
     }

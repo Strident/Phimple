@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * This file is part of the Phimple package.
  *
  * (c) Elliot Wright <elliot@elliotwright.co>
