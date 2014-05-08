@@ -14,5 +14,8 @@
     "require": {
         "php": ">=5.5.9"
     },
+    "autoload": {
+        "psr-0": { "Phimple\\": "src/" }
+    },
     "minimum-stability": "dev"
 }
