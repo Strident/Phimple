@@ -1,4 +1,4 @@
 Phimple
 =======
 
-A simple dependency injection container based heavily on Pimple, for Trident.
+Simple dependency injection container, inspired by Pimple.

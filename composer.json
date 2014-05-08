@@ -1,0 +1,18 @@
+{
+    "name": "strident/phimple",
+    "type": "library",
+    "description": "Simple dependency injection container, inspired by Pimple.",
+    "keywords": ["dic"],
+    "license": "MIT",
+    "homepage": "http://strident.io",
+    "authors": [
+        {
+            "name": "Elliot Wright",
+            "email": "elliot@elliotwright.co"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "minimum-stability": "dev"
+}
