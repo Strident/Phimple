@@ -23,8 +23,8 @@ class LockedItemException extends \RuntimeException
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct($name, \Exception $previous = null)
     {
-        parent::__construct(sprintf('Cannot override locked item "%s".', $name));
+        parent::__construct(sprintf('Cannot override locked item "%s".', $name), 0, $previous);
     }
 }

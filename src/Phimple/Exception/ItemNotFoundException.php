@@ -23,8 +23,8 @@ class ItemNotFoundException extends \InvalidArgumentException
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct($name, \Exception $previous = null)
     {
-        parent::__construct(sprintf('Item "%s" could not be found.', $name));
+        parent::__construct(sprintf('Item "%s" could not be found.', $name), 0, $previous);
     }
 }
