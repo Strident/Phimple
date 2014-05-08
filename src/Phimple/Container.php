@@ -54,19 +54,21 @@ class Container implements ContainerInterface
             throw new \InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
         }
 
+        $service = $this->services->get($name);
+
         if ($this->services->isLocked($name)
             || ! method_exists($this->services->get($name), '__invoke')) {
-            return $this->services->get($name);
+            return $service;
         }
 
-        if (isset($this->factories[$this->services->get($name)])) {
-            return $this->services->get($name)($this);
+        if (isset($this->factories[$service])) {
+            return $service($this);
         }
 
-        $this->services->set($name, $this->services->get($name)($this));
+        $this->services->set($name, $service($this));
         $this->services->lock($name);
 
-        return $this->services->get($name)($this);
+        return $this->services->get($name);
     }
 
     /**
@@ -80,7 +82,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function unset($name)
+    public function remove($name)
     {
         unset($this->factories[$name]);
 
@@ -116,7 +118,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function unsetParam($name)
+    public function removeParam($name)
     {
         return $this->parameters->remove($name);
     }
