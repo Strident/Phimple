@@ -17,5 +17,8 @@
     "autoload": {
         "psr-0": { "Phimple\\": "src/" }
     },
+    "autoload-dev": {
+        "psr-4": { "Phimple\\Tests\\": "tests/" }
+    },
     "minimum-stability": "dev"
 }

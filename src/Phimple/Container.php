@@ -84,9 +84,15 @@ class Container implements ContainerInterface
      */
     public function remove($name)
     {
-        unset($this->factories[$name]);
+        if ($this->services->has($name)) {
+            if (is_object($this->services->get($name))) {
+                unset($this->factories[$this->services->get($name)]);
+            }
 
-        return $this->services->remove($name);
+            $this->services->remove($name);
+        }
+
+        return $this;
     }
 
     /**
@@ -104,6 +110,10 @@ class Container implements ContainerInterface
      */
     public function getParam($name)
     {
+        if ( ! $this->parameters->has($name)) {
+            throw new \InvalidArgumentException(sprintf('Parameter "%s" is not defined.', $name));
+        }
+
         return $this->parameters->get($name);
     }
 
