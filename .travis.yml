@@ -7,7 +7,12 @@ php:
 
 before_script:
     - composer selfupdate
+    - composer install --dev --no-interaction
     - COMPOSER_ROOT_VERSION=dev-master composer dump-autoload
 
 script:
+    - mkdir -p build/logs
     - phpunit
+
+after_script:
+    - php vendor/bin/coveralls
