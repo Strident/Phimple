@@ -98,10 +98,6 @@ class LockBox implements \Countable
      */
     public function remove($name)
     {
-        if (isset($this->locked[$name])) {
-            throw new LockedItemException($name);
-        }
-
         unset($this->items[$name], $this->locked[$name]);
 
         return $this;

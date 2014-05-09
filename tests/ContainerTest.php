@@ -172,6 +172,76 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Service "foo" is not defined.
+     */
+    public function testExtendValidtesServiceIsPresent()
+    {
+        $container = new Container();
+        $container->extend('foo', function($c) {});
+    }
+
+    public function testKeys()
+    {
+        $container = new Container();
+        $container->set('foo', function($c) {});
+        $container->set('bar', function($c) {});
+
+        $this->assertEquals(['foo', 'bar'], $container->keys());
+    }
+
+    public function testSettingAnInvokableObjectShouldTreatItAsFactory()
+    {
+        $container = new Container();
+        $container->set('invokable', new Fixtures\Invokable());
+
+        $this->assertInstanceOf('Phimple\Tests\Fixtures\Service', $container->get('invokable'));
+    }
+
+    public function testSettingNonInvokableObjectShouldTreatItAsInvokedService()
+    {
+        $container = new Container();
+        $container->set('non_invokable', new Fixtures\NonInvokable());
+
+        $this->assertInstanceOf('Phimple\Tests\Fixtures\NonInvokable', $container->get('non_invokable'));
+    }
+
+    /**
+     * @dataProvider badServiceDefinitionProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Service definition is not a Closure or invokable object.
+     */
+    public function testFactoryFailsForInvalidServiceDefinitions($service)
+    {
+        $container = new Container();
+        $container->factory($service);
+    }
+
+    /**
+     * @dataProvider badServiceDefinitionProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Service "foo" does not contain an object definition.
+     */
+    public function testExtendFailsForInvalidServiceDefinitions($service)
+    {
+        $container = new Container();
+        $container->set('foo', $service);
+        $container->extend('foo', function($c) {});
+    }
+
+    /**
+     * @dataProvider badServiceDefinitionProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Extension service definition is not a Closure or invokable object.
+     */
+    public function testExtendFailsForEmptyServiceDefinitions($service)
+    {
+        $container = new Container();
+        $container->set('foo', function($c) {});
+        $container->extend('foo', $service);
+    }
+
+    /**
      * Provider for service definitions
      */
     public function badServiceDefinitionProvider()
@@ -196,5 +266,94 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             }),
             array(new Fixtures\Invokable())
         );
+    }
+
+    public function testDefiningNewServiceAfterLock()
+    {
+        $container = new Container();
+        $container->set('foo', function() {
+            return 'foo';
+        });
+
+        $foo = $container->get('foo');
+
+        $container->set('bar', function() {
+            return 'bar';
+        });
+
+        $this->assertSame('bar', $container->get('bar'));
+    }
+
+    /**
+     * @expectedException Phimple\Exception\LockedItemException
+     * @expectedExceptionMessage Cannot override locked item "foo".
+     */
+    public function testOverridingServiceAfterLock()
+    {
+        $container = new Container();
+        $container->set('foo', function() {
+            return 'foo';
+        });
+
+        $foo = $container->get('foo');
+
+        $container->set('foo', function() {
+            return 'bar';
+        });
+    }
+
+    public function testRemovingServiceAfterLock()
+    {
+        $container = new Container();
+        $container->set('foo', function() {
+            return 'foo';
+        });
+
+        $foo = $container->get('foo');
+
+        $container->remove('foo');
+        $container->set('foo', function() {
+            return 'bar';
+        });
+
+        $this->assertSame('bar', $container->get('foo'));
+    }
+
+    public function testExtendingService()
+    {
+        $container = new Container();
+        $container->set('foo', function($c) {
+            return 'foo';
+        });
+
+        $container->extend('foo', function($foo, $c) {
+            return "$foo.bar";
+        });
+
+        $container->extend('foo', function($foo, $c) {
+            return "$foo.baz";
+        });
+
+        $this->assertSame('foo.bar.baz', $container->get('foo'));
+    }
+
+    public function testExtendingServiceAfterOtherServiceLock()
+    {
+        $container = new Container();
+        $container->set('foo', function($c) {
+            return 'foo';
+        });
+
+        $container->set('bar', function($c) {
+            return 'bar';
+        });
+
+        $foo = $container->get('foo');
+
+        $container->extend('bar', function($bar, $c) {
+            return "$bar.baz";
+        });
+
+        $this->assertSame('bar.baz', $container->get('bar'));
     }
 }

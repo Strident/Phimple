@@ -153,7 +153,7 @@ class Container implements ContainerInterface
     public function factory($callable)
     {
         if ( ! is_object($callable) || ! method_exists($callable, '__invoke')) {
-            throw \InvalidArgumentException('Service definition is not a Closure or invokable object.');
+            throw new \InvalidArgumentException('Service definition is not a Closure or invokable object.');
         }
 
         $this->factories->attach($callable);
