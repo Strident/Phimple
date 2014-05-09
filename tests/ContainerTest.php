@@ -164,7 +164,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $s->setAccessible(true);
         $i = new \ReflectionProperty($s->getValue($container), 'items');
         $i->setAccessible(true);
-        $this->assertEmpty($i->getValue($s));
+        $this->assertEmpty($i->getValue($s->getValue($container)));
 
         $f = new \ReflectionProperty($container, 'factories');
         $f->setAccessible(true);
