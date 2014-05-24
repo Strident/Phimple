@@ -35,13 +35,20 @@ class LockBox implements \Countable
     }
 
     /**
-     * Returns the items names.
+     * Sets a item by name.
      *
-     * @return array
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return LockBox
      */
-    public function contents()
+    public function set($name, $value)
     {
-        return array_keys($this->items);
+        if (isset($this->locked[$name])) {
+            throw new LockedItemException($name);
+        }
+
+        $this->items[$name] = $value;
     }
 
     /**
@@ -58,23 +65,6 @@ class LockBox implements \Countable
         }
 
         return $this->items[$name];
-    }
-
-    /**
-     * Sets a item by name.
-     *
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return LockBox
-     */
-    public function set($name, $value)
-    {
-        if (isset($this->locked[$name])) {
-            throw new LockedItemException($name);
-        }
-
-        $this->items[$name] = $value;
     }
 
     /**
@@ -163,5 +153,15 @@ class LockBox implements \Countable
     public function count()
     {
         return count($this->items);
+    }
+
+    /**
+     * Returns the items names.
+     *
+     * @return array
+     */
+    public function contents()
+    {
+        return array_keys($this->items);
     }
 }
