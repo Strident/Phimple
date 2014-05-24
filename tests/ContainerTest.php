@@ -104,7 +104,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Service "foo" is not defined.
      */
-    public function testGetValidtesKeyIsPresent()
+    public function testGetValidatesKeyIsPresent()
     {
         $container = new Container();
         $container->get('foo');
@@ -114,7 +114,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Parameter "foo" is not defined.
      */
-    public function testGetParamValidtesKeyIsPresent()
+    public function testGetParamValidatesKeyIsPresent()
     {
         $container = new Container();
         $container->getParameter('foo');
