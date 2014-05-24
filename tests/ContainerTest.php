@@ -21,9 +21,9 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetParamWithString()
     {
         $container = new Container();
-        $container->setParam('param', 'value');
+        $container->setParameter('param', 'value');
 
-        $this->assertEquals('value', $container->getParam('param'));
+        $this->assertEquals('value', $container->getParameter('param'));
     }
 
     public function testSetServiceWithClosure()
@@ -70,16 +70,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testHasService()
     {
         $container = new Container();
-        $container->setParam('param', 'value');
-        $container->setParam('null', null);
+        $container->setParameter('param', 'value');
+        $container->setParameter('null', null);
         $container->set('service', function($c) {
             return new Fixtures\Service();
         });
 
-        $this->assertTrue($container->hasParam('param'));
-        $this->assertTrue($container->hasParam('null'));
+        $this->assertTrue($container->hasParameter('param'));
+        $this->assertTrue($container->hasParameter('null'));
         $this->assertTrue($container->has('service'));
-        $this->assertFalse($container->hasParam('not_here'));
+        $this->assertFalse($container->hasParameter('not_here'));
         $this->assertFalse($container->has('not_here'));
     }
 
@@ -117,7 +117,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testGetParamValidtesKeyIsPresent()
     {
         $container = new Container();
-        $container->getParam('foo');
+        $container->getParameter('foo');
     }
 
     /**
