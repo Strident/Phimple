@@ -57,11 +57,23 @@ class Container implements \ArrayAccess, ContainerInterface
         return $this->getParameter($name);
     }
 
+    /**
+     * Array item exists
+     *
+     * @param  string $name
+     * @return boolean
+     */
     public function offsetExists($name)
     {
         return $this->hasParameter($name);
     }
 
+    /**
+     * Array item unset
+     *
+     * @param  string $name
+     * @return boolean
+     */
     public function offsetUnset($name)
     {
         return $this->removeParameter($name);

@@ -18,12 +18,51 @@ use Phimple\Container;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSetParamWithString()
+    public function testSetParameterWithString()
     {
         $container = new Container();
-        $container->setParameter('param', 'value');
+        $container['param'] = 'value';
 
-        $this->assertEquals('value', $container->getParameter('param'));
+        $this->assertEquals('value', $container['param']);
+    }
+
+    public function testSetParameterWithObject()
+    {
+        $container = new Container();
+        $container['param'] = new Fixtures\Service();
+
+        $this->assertInstanceOf('Phimple\Tests\Fixtures\Service', $container['param']);
+    }
+
+    public function testHasParameter()
+    {
+        $container = new Container();
+
+        $this->assertFalse(isset($container['param']));
+
+        $container['param'] = 'value';
+
+        $this->assertTrue(isset($container['param']));
+    }
+
+    public function testRemoveParameter()
+    {
+        $container = new Container();
+        $container['param'] = 'value';
+
+        $this->assertTrue(isset($container['param']));
+
+        unset($container['param']);
+
+        $this->assertFalse(isset($container['param']));
+    }
+
+    public function testSetServiceWithString()
+    {
+        $container = new Container();
+        $container->set('service', 'value');
+
+        $this->assertEquals('value', $container->get('service'));
     }
 
     public function testSetServiceWithClosure()
