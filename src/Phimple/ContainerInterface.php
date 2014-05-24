@@ -22,8 +22,8 @@ interface ContainerInterface
     public function get($name);
     public function has($name);
     public function remove($name);
-    public function setParam($name, $value);
-    public function getParam($name);
-    public function hasParam($name);
-    public function removeParam($name);
+    public function setParameter($name, $value);
+    public function getParameter($name);
+    public function hasParameter($name);
+    public function removeParameter($name);
 }

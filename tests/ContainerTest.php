@@ -18,12 +18,51 @@ use Phimple\Container;
  */
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSetParamWithString()
+    public function testSetParameterWithString()
     {
         $container = new Container();
-        $container->setParam('param', 'value');
+        $container['param'] = 'value';
 
-        $this->assertEquals('value', $container->getParam('param'));
+        $this->assertEquals('value', $container['param']);
+    }
+
+    public function testSetParameterWithObject()
+    {
+        $container = new Container();
+        $container['param'] = new Fixtures\Service();
+
+        $this->assertInstanceOf('Phimple\Tests\Fixtures\Service', $container['param']);
+    }
+
+    public function testHasParameter()
+    {
+        $container = new Container();
+
+        $this->assertFalse(isset($container['param']));
+
+        $container['param'] = 'value';
+
+        $this->assertTrue(isset($container['param']));
+    }
+
+    public function testRemoveParameter()
+    {
+        $container = new Container();
+        $container['param'] = 'value';
+
+        $this->assertTrue(isset($container['param']));
+
+        unset($container['param']);
+
+        $this->assertFalse(isset($container['param']));
+    }
+
+    public function testSetServiceWithString()
+    {
+        $container = new Container();
+        $container->set('service', 'value');
+
+        $this->assertEquals('value', $container->get('service'));
     }
 
     public function testSetServiceWithClosure()
@@ -70,16 +109,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testHasService()
     {
         $container = new Container();
-        $container->setParam('param', 'value');
-        $container->setParam('null', null);
+        $container->setParameter('param', 'value');
+        $container->setParameter('null', null);
         $container->set('service', function($c) {
             return new Fixtures\Service();
         });
 
-        $this->assertTrue($container->hasParam('param'));
-        $this->assertTrue($container->hasParam('null'));
+        $this->assertTrue($container->hasParameter('param'));
+        $this->assertTrue($container->hasParameter('null'));
         $this->assertTrue($container->has('service'));
-        $this->assertFalse($container->hasParam('not_here'));
+        $this->assertFalse($container->hasParameter('not_here'));
         $this->assertFalse($container->has('not_here'));
     }
 
@@ -104,7 +143,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Service "foo" is not defined.
      */
-    public function testGetValidtesKeyIsPresent()
+    public function testGetValidatesKeyIsPresent()
     {
         $container = new Container();
         $container->get('foo');
@@ -114,10 +153,10 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Parameter "foo" is not defined.
      */
-    public function testGetParamValidtesKeyIsPresent()
+    public function testGetParamValidatesKeyIsPresent()
     {
         $container = new Container();
-        $container->getParam('foo');
+        $container->getParameter('foo');
     }
 
     /**

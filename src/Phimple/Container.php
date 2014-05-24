@@ -19,7 +19,7 @@ use Phimple\LockBox;
  *
  * @author Elliot Wright <elliot@elliotwright.co>
  */
-class Container implements ContainerInterface
+class Container implements \ArrayAccess, ContainerInterface
 {
     protected $factories;
     protected $parameters;
@@ -33,6 +33,50 @@ class Container implements ContainerInterface
         $this->factories = new \SplObjectStorage();
         $this->parameters = new LockBox();
         $this->services = new LockBox();
+    }
+
+    /**
+     * Array access for setting parameters
+     *
+     * @param  string $name
+     * @param  mixed  $value
+     */
+    public function offsetSet($name, $value)
+    {
+        $this->setParameter($name, $value);
+    }
+
+    /**
+     * Array access for getting parameters
+     *
+     * @param  string $name
+     * @return mixed
+     */
+    public function offsetGet($name)
+    {
+        return $this->getParameter($name);
+    }
+
+    /**
+     * Array item exists
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function offsetExists($name)
+    {
+        return $this->hasParameter($name);
+    }
+
+    /**
+     * Array item unset
+     *
+     * @param  string $name
+     * @return boolean
+     */
+    public function offsetUnset($name)
+    {
+        return $this->removeParameter($name);
     }
 
     /**
@@ -98,7 +142,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function setParam($name, $value)
+    public function setParameter($name, $value)
     {
         $this->parameters->set($name, $value);
 
@@ -108,7 +152,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function getParam($name)
+    public function getParameter($name)
     {
         if ( ! $this->parameters->has($name)) {
             throw new \InvalidArgumentException(sprintf('Parameter "%s" is not defined.', $name));
@@ -120,7 +164,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function hasParam($name)
+    public function hasParameter($name)
     {
         return $this->parameters->has($name);
     }
@@ -128,7 +172,7 @@ class Container implements ContainerInterface
     /**
      * {@inheritDoc}
      */
-    public function removeParam($name)
+    public function removeParameter($name)
     {
         return $this->parameters->remove($name);
     }
