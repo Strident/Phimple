@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Phimple Test Suite">
-            <directory>src/Phimple/Tests</directory>
+            <directory suffix="Test.php">src/Phimple/Tests</directory>
         </testsuite>
     </testsuites>
 </phpunit>
