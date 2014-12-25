@@ -1,18 +1,17 @@
 language: php
+
 php:
-    - 5.6
-    - 5.5
-    - 5.4
-    - hhvm
+- 5.6
+- 5.5
+- 5.4
+- hhvm
 
 before_script:
-    - composer selfupdate
-    - composer install --dev --no-interaction
-    - COMPOSER_ROOT_VERSION=dev-master composer dump-autoload
+- composer selfupdate
+- composer install --dev --no-interaction
 
 script:
-    - mkdir -p build/logs
-    - phpunit
+- phpunit
 
 after_script:
-    - php vendor/bin/coveralls
+- php vendor/bin/coveralls
