@@ -214,10 +214,16 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Service "foo" is not defined.
      */
-    public function testExtendValidtesServiceIsPresent()
+    public function testExtendValidatesServiceIsPresent()
     {
         $container = new Container();
         $container->extend('foo', function($c) {});
+    }
+
+    public function testExtendValidatesServiceIsPresentButFailsSilentlyWithoutStrict()
+    {
+        $container = new Container();
+        $container->extend('foo', function($c) {}, false);
     }
 
     public function testKeys()
