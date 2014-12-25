@@ -21,15 +21,23 @@ use Phimple\Exception\LockedItemException;
  */
 class LockBox implements \Countable
 {
+    /**
+     * @var array
+     */
     protected $items;
+
+    /**
+     * @var array
+     */
     protected $locked = [];
+
 
     /**
      * Constructor.
      *
      * @param array $items
      */
-    public function __construct(array $items = array())
+    public function __construct(array $items = [])
     {
         $this->items = $items;
     }
@@ -60,7 +68,7 @@ class LockBox implements \Countable
      */
     public function get($name)
     {
-        if ( ! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new ItemNotFoundException($name);
         }
 
@@ -102,7 +110,7 @@ class LockBox implements \Countable
      */
     public function lock($name)
     {
-        if ( ! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new ItemNotFoundException($name);
         }
 
@@ -120,7 +128,7 @@ class LockBox implements \Countable
      */
     public function unlock($name)
     {
-        if ( ! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new ItemNotFoundException($name);
         }
 
@@ -138,7 +146,7 @@ class LockBox implements \Countable
      */
     public function isLocked($name)
     {
-        if ( ! $this->has($name)) {
+        if (!$this->has($name)) {
             throw new ItemNotFoundException($name);
         }
 
@@ -148,7 +156,7 @@ class LockBox implements \Countable
     /**
      * Returns the number of parameters.
      *
-     * @return int The number of parameters
+     * @return int
      */
     public function count()
     {

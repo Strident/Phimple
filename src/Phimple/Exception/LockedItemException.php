@@ -21,7 +21,8 @@ class LockedItemException extends \RuntimeException
     /**
      * Constructor.
      *
-     * @param string $name
+     * @param string     $name
+     * @param \Exception $previous
      */
     public function __construct($name, \Exception $previous = null)
     {
