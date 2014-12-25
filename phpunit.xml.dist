@@ -15,7 +15,7 @@
 
     <testsuites>
         <testsuite name="Phimple Test Suite">
-            <directory>./tests</directory>
+            <directory>./src/Phimple/Tests</directory>
         </testsuite>
     </testsuites>
 
