@@ -4,7 +4,7 @@
     "description": "Simple dependency injection container, inspired by Pimple.",
     "keywords": [ "dic" ],
     "license": "MIT",
-    "homepage": "http://strident.io/phimple",
+    "homepage": "https://github.com/Strident/Phimple",
     "authors": [
         {
             "name": "Elliot Wright",
