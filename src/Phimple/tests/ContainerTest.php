@@ -330,7 +330,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\LockedItemException
+     * @expectedException \Phimple\Exception\LockedItemException
      * @expectedExceptionMessage Cannot override locked item "foo".
      */
     public function testOverridingServiceAfterLock()
