@@ -11,15 +11,20 @@
 
 namespace Phimple;
 
+use ArrayAccess;
+use Closure;
+use InvalidArgumentException;
+use SplObjectStorage;
+
 /**
  * Container
  *
  * @author Elliot Wright <elliot@elliotwright.co>
  */
-class Container implements \ArrayAccess, ContainerInterface
+class Container implements ArrayAccess, ContainerInterface
 {
     /**
-     * @var \SplObjectStorage
+     * @var SplObjectStorage
      */
     protected $factories;
 
@@ -39,7 +44,7 @@ class Container implements \ArrayAccess, ContainerInterface
      */
     public function __construct()
     {
-        $this->factories = new \SplObjectStorage();
+        $this->factories = new SplObjectStorage();
         $this->parameters = new LockBox();
         $this->services = new LockBox();
     }
@@ -107,10 +112,10 @@ class Container implements \ArrayAccess, ContainerInterface
     public function get($name)
     {
         if (!$this->services->has($name)) {
-            throw new \InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
+            throw new InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
         }
 
-        /** @var \Closure $service */
+        /** @var Closure $service */
         $service = $this->services->get($name);
 
         if ($this->services->isLocked($name)
@@ -168,7 +173,7 @@ class Container implements \ArrayAccess, ContainerInterface
     public function getParameter($name)
     {
         if (!$this->parameters->has($name)) {
-            throw new \InvalidArgumentException(sprintf('Parameter "%s" is not defined.', $name));
+            throw new InvalidArgumentException(sprintf('Parameter "%s" is not defined.', $name));
         }
 
         return $this->parameters->get($name);
@@ -207,12 +212,12 @@ class Container implements \ArrayAccess, ContainerInterface
      *
      * @return callable
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function factory($callable)
     {
         if (!is_object($callable) || !method_exists($callable, '__invoke')) {
-            throw new \InvalidArgumentException('Service definition is not a Closure or invokable object.');
+            throw new InvalidArgumentException('Service definition is not a Closure or invokable object.');
         }
 
         $this->factories->attach($callable);
@@ -229,13 +234,13 @@ class Container implements \ArrayAccess, ContainerInterface
      *
      * @return callable
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function extend($name, $callable, $strict = true)
     {
         if (!$this->services->has($name)) {
             if ($strict) {
-                throw new \InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
+                throw new InvalidArgumentException(sprintf('Service "%s" is not defined.', $name));
             } else {
                 return false;
             }
@@ -244,15 +249,15 @@ class Container implements \ArrayAccess, ContainerInterface
         $factory = $this->services->get($name);
 
         if (!is_object($factory) || !method_exists($factory, '__invoke')) {
-            throw new \InvalidArgumentException(sprintf('Service "%s" does not contain an object definition.', $name));
+            throw new InvalidArgumentException(sprintf('Service "%s" does not contain an object definition.', $name));
         }
 
         if (!is_object($callable) || !method_exists($callable, '__invoke')) {
-            throw new \InvalidArgumentException('Extension service definition is not a Closure or invokable object.');
+            throw new InvalidArgumentException('Extension service definition is not a Closure or invokable object.');
         }
 
         $extended = function($c) use($callable, $factory) {
-            /** @var \Closure $factory */
+            /** @var Closure $factory */
             return $callable($factory($c), $c);
         };
 
