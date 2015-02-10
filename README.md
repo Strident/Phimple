@@ -1,5 +1,7 @@
-
-#Phimple [![Build Status](https://img.shields.io/travis/Strident/Phimple.svg)](https://travis-ci.org/Strident/Phimple) [![Coverage Status](https://img.shields.io/coveralls/Strident/Phimple.svg)](https://coveralls.io/r/Strident/Phimple)
+#Phimple
+[![Build Status](https://img.shields.io/travis/Strident/Phimple.svg)](https://travis-ci.org/Strident/Phimple) 
+[![Coverage](https://img.shields.io/codeclimate/coverage/github/Strident/Phimple.svg)](https://codeclimate.com/github/Strident/Phimple)
+[![Code Climate](https://img.shields.io/codeclimate/github/Strident/Phimple.svg)](https://codeclimate.com/github/Strident/Phimple)
 
 Phimple is an extremely lightweight dependency injection container, heavily inspired by [Pimple][1].
 
