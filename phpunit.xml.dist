@@ -15,11 +15,20 @@
 
     <testsuites>
         <testsuite name="Phimple Test Suite">
-            <directory suffix="Test.php">src/Phimple/Tests</directory>
+            <directory suffix="Test.php">tests/</directory>
         </testsuite>
     </testsuites>
 
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
     </logging>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+            <exclude>
+                <directory>tests/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
 </phpunit>
