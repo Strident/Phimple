@@ -224,10 +224,12 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container->extend('foo', function($c) {});
     }
 
-    public function testExtendValidatesServiceIsPresentButFailsSilentlyWithoutStrict()
+    public function testExtendValidatesServiceIsPresentWithoutStrict()
     {
         $container = new Container();
-        $container->extend('foo', function($c) {}, false);
+        $result = $container->extend("foo", function($c) {}, false);
+
+        $this->assertFalse($result);
     }
 
     public function testKeys()
