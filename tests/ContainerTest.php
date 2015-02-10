@@ -68,7 +68,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetServiceWithClosure()
     {
         $container = new Container();
-        $container->set('service', function($c) {
+        $container->set('service', function() {
             return new Fixtures\Service();
         });
 
@@ -78,7 +78,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testFactoryServicesShouldBeDifferent()
     {
         $container = new Container();
-        $container->set('service', $container->factory(function($c) {
+        $container->set('service', $container->factory(function() {
             return new Fixtures\Service();
         }));
 
@@ -94,7 +94,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testServiceShouldPassContainerAsParameter()
     {
         $container = new Container();
-        $container->set('service', function($c) {
+        $container->set('service', function() {
             return new Fixtures\Service();
         });
 
@@ -111,7 +111,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $container = new Container();
         $container->setParameter('param', 'value');
         $container->setParameter('null', null);
-        $container->set('service', function($c) {
+        $container->set('service', function() {
             return new Fixtures\Service();
         });
 
@@ -124,6 +124,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider serviceDefinitionProvider
+     *
+     * @param $service
      */
     public function testServiceShouldBeShared($service)
     {
@@ -161,15 +163,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider serviceDefinitionProvider
+     *
+     * @param $service
      */
     public function testExtend($service)
     {
         $container = new Container();
-        $container->set('shared', function($c) {
+        $container->set('shared', function() {
             return new Fixtures\Service();
         });
 
-        $container->set('factory', $container->factory(function($c) {
+        $container->set('factory', $container->factory(function() {
             return new Fixtures\Service();
         }));
 
@@ -195,8 +199,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testExtendDoesNotLeakWithFactories()
     {
         $container = new Container();
-        $container->set('foo', $container->factory(function($c) { return; }));
-        $container->set('foo', $container->extend('foo', function($foo, $c) { return; }));
+        $container->set('foo', $container->factory(function() { return; }));
+        $container->set('foo', $container->extend('foo', function() { return; }));
         $container->remove('foo');
 
         $s = new \ReflectionProperty($container, 'services');
@@ -320,7 +324,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'foo';
         });
 
-        $foo = $container->get('foo');
+        $container->get('foo');
 
         $container->set('bar', function() {
             return 'bar';
@@ -340,7 +344,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             return 'foo';
         });
 
-        $foo = $container->get('foo');
+        $container->get('foo');
 
         $container->set('foo', function() {
             return 'bar';
@@ -367,15 +371,15 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testExtendingService()
     {
         $container = new Container();
-        $container->set('foo', function($c) {
+        $container->set('foo', function() {
             return 'foo';
         });
 
-        $container->extend('foo', function($foo, $c) {
+        $container->extend('foo', function($foo) {
             return "$foo.bar";
         });
 
-        $container->extend('foo', function($foo, $c) {
+        $container->extend('foo', function($foo) {
             return "$foo.baz";
         });
 
@@ -385,17 +389,17 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testExtendingServiceAfterOtherServiceLock()
     {
         $container = new Container();
-        $container->set('foo', function($c) {
+        $container->set('foo', function() {
             return 'foo';
         });
 
-        $container->set('bar', function($c) {
+        $container->set('bar', function() {
             return 'bar';
         });
 
-        $foo = $container->get('foo');
+        $container->get('foo');
 
-        $container->extend('bar', function($bar, $c) {
+        $container->extend('bar', function($bar) {
             return "$bar.baz";
         });
 

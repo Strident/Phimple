@@ -35,7 +35,7 @@ class LockBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\LockedItemException
+     * @expectedException \Phimple\Exception\LockedItemException
      * @expectedExceptionMessage Cannot override locked item "item".
      */
     public function testSetValidatesItemIsNotLocked()
@@ -47,7 +47,7 @@ class LockBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\ItemNotFoundException
+     * @expectedException \Phimple\Exception\ItemNotFoundException
      * @expectedExceptionMessage Item "item" could not be found.
      */
     public function testGetValidatesKeyIsPresent()
@@ -91,7 +91,7 @@ class LockBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\ItemNotFoundException
+     * @expectedException \Phimple\Exception\ItemNotFoundException
      * @expectedExceptionMessage Item "item" could not be found.
      */
     public function testLockValidatesKeyIsPresent()
@@ -101,7 +101,7 @@ class LockBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\ItemNotFoundException
+     * @expectedException \Phimple\Exception\ItemNotFoundException
      * @expectedExceptionMessage Item "item" could not be found.
      */
     public function testUnlockValidatesKeyIsPresent()
@@ -111,7 +111,7 @@ class LockBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Phimple\Exception\ItemNotFoundException
+     * @expectedException \Phimple\Exception\ItemNotFoundException
      * @expectedExceptionMessage Item "item" could not be found.
      */
     public function testIsLockedAfterRemove()
